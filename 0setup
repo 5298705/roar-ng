@@ -26,15 +26,22 @@ do
 		# create a temporary file
 		temp_file="$(mktemp -u)"
 
-		# download the package list
-		echo "Downloading the package list"
-		download_file $package_list_url $temp_file
-		if [ 0 -ne $? ]
-		then
-			echo "Error: failed to download $package_list_url."
-			rm -f $temp_file
-			exit 1
-		fi
+		case $package_list_url in # Support for local repositories, without a download-url
+			local)
+				cat repos/"$repository_name">$temp_file
+				;;
+			*)
+				# download the package list
+				echo "  downloading the package list"
+				download_file $package_list_url $temp_file
+				if [ 0 -ne $? ]
+				then
+					echo "Error: failed to download $package_list_url."
+					rm -f $temp_file
+					exit 1
+				fi
+				;;
+			esac # \ Support for local repositories, without a download-url
 
 		# decompress the package list
 		case $package_list_url in
