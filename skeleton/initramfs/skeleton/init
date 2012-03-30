@@ -48,6 +48,11 @@ do
 		boot_mode=*)
 			boot_mode="${argument#*=}"
 			;;
+		savefile=*)
+			s_f="${argument#*=}"
+			home_partition="${s_f%%\/*}"
+			boot_mode="frugal"
+			;;
 		sleep=*)
 			sleep="${argument#*=}"
 			;;
@@ -79,7 +84,8 @@ case "$sleep" in
 esac
 
 # generate device nodes for all recognized partitions
-echo -n "Recognizing partitions ..."
+# BE in skeleton/rootfs/skeleton/etc/rc.d/rc.sysinit, consequently changing here ...
+echo -n "Recognising partitions ..."
 mdev -s
 echo " done"
 
@@ -133,13 +139,16 @@ case $boot_mode in
 		[ 0 -ne $? ] && show_error "failed to mount the home partition"
 		echo " done"
 
+		[ -f /mnt/$home_partition/"${s_f#*\/}" ] && SAVE_FILE_NAME="${s_f#*\/}"
+		[ -d /mnt/$home_partition/"${s_f#*\/}" ] && SAVE_DIR="${s_f#*\/}"           
+
 		# if there is no save file, offer the user to create one now
 		[ ! -f /mnt/$home_partition/$SAVE_FILE_NAME ] && \
-		                   create_save_file /mnt/$home_partition/$SAVE_FILE_NAME
+							create_save_file /mnt/$home_partition/$SAVE_DIR/$SAVE_FILE_NAME
 
 		# mount the save file
 		echo -n "Loading save file ..."
-		mount /mnt/$home_partition/$SAVE_FILE_NAME /mnt/save -o loop,rw
+		mount /mnt/$home_partition/$SAVE_DIR/$SAVE_FILE_NAME /mnt/save -o loop,rw
 		[ 0 -ne $? ] && show_error "failed to mount the save file"
 		echo " done"
 		;;
