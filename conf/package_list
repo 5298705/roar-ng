@@ -73,7 +73,7 @@ slackware|hicolor-icon-theme|hicolor-icon-theme|exe,dev,doc,nls
 slackware|imake|imake|exe>dev,dev,doc,nls
 slackware|intltool|intltool|exe>dev,dev,doc,nls
 slackware|iptables|iptables|exe,dev,doc,nls
-slackware|kbd|kbd|exe,dev,doc,nls
+slackware|kbd|kbd|exe,dev>exe,doc,nls
 slackware|lcms|lcms|exe,dev,doc,nls
 slackware|less|less|exe,dev,doc,nls
 slackware|libcap|libcap|exe,dev,doc,nls
