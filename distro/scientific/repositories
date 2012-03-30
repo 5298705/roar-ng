@@ -1,0 +1,26 @@
+# include the distribution information file
+. ./conf/distrorc
+
+case $DISTRO_ARCH in
+	x86_64)
+		arch="x86_64"
+		;;
+	i?86)
+		arch="i386"
+		;;
+esac
+
+version="$(cat distro/scientific/version)"
+
+# repositories - package list URL|repository name
+repositories="http://ftp.scientificlinux.org/linux/scientific/$version/$arch/os/repodata/primary.xml.gz|scientific_main"
+#"http://ftp.sunet.se/pub/os/Linux/distributions/scientific/$version/$arch/os/repodata/repomd.xml|scientific-main"
+
+# package download mirrors
+mirrors="http://ftp.scientificlinux.org/linux/scientific/$version/$arch/os
+		http://ftp.sunet.se/pub/os/Linux/distributions/scientific/$version/$arch/os
+		http://linuxsoft.cern.ch/scientific/$version/$arch/os
+		http://nl.mirror.eurid.eu/scientific/$version/$arch/os
+		http://ftp.tu-chemnitz.de/pub/linux/scientific/$version/$arch/os
+		http://mirror.cpsc.ucalgary.ca/mirror/scientificlinux.org/$version/$arch/os
+		http://mirror.aarnet.edu.au/pub/scientific/$version/$arch/os"
