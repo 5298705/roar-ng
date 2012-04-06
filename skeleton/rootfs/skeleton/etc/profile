@@ -27,7 +27,7 @@ do
 	. $i
 done
 
-[ -e /etc/profile.local ] && . /etc/profile.local
+#[ -e /etc/profile.local ] && . /etc/profile.local
 
 #######################
 # important variables #
@@ -42,6 +42,8 @@ EDITOR="vi"
 # the system locale
 LANG="C"
 LC_COLLATE="C"
+
+[ -e /etc/profile.local ] && . /etc/profile.local
 
 ###############################
 # freedesktop.org directories #
