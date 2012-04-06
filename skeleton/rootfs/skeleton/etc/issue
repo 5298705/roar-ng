@@ -1,2 +1,3 @@
 Welcome to DISTRO_NAME DISTRO_VERSION!
-
++\s \r [\m arch]
++\l
