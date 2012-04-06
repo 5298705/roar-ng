@@ -1,23 +1,23 @@
 #!/bin/sh
 
-PKG_NAME="lftp"
-PKG_VER="4.3.6"
+PKG_NAME="libxfce4ui"
+PKG_VER="4.9.1"
 PKG_REV="1"
-PKG_DESC="FTP client"
-PKG_CAT="Internet"
-PKG_DEPS=""
+PKG_DESC="Widgets library for Xfce"
+PKG_CAT="BuildingBlock"
+PKG_DEPS="+gtk+,+libxfce4util,+xfconf"
 
 download() {
-	[ -f $PKG_NAME-$PKG_VER.tar.xz ] && return 0
+	[ -f $PKG_NAME-$PKG_VER.tar.bz2 ] && return 0
 	# download the sources tarball
-	download_file http://ftp.yar.ru/pub/source/lftp/$PKG_NAME-$PKG_VER.tar.xz
+	download_file http://archive.xfce.org/src/xfce/$PKG_NAME/4.9/$PKG_NAME-$PKG_VER.tar.bz2
 	[ $? -ne 0 ] && return 1
 	return 0
 }
 
 build() {
 	# extract the sources tarball
-	tar -xJvf $PKG_NAME-$PKG_VER.tar.xz
+	tar -xjvf $PKG_NAME-$PKG_VER.tar.bz2
 	[ $? -ne 0 ] && return 1
 
 	cd $PKG_NAME-$PKG_VER
@@ -26,14 +26,10 @@ build() {
 	./configure $AUTOTOOLS_BASE_OPTS \
 	            --disable-static \
 	            --enable-shared \
-	            --without-debug \
-	            --with-pager="$(which less)" \
-	            --without-socks \
-	            --without-socks5 \
-	            --without-socksdante \
-	            --with-modules \
-	            --with-gnutls \
-	            --without-dnssec-local-validation
+	            --disable-startup-notification \
+	            --enable-keyboard-library \
+	            --disable-gladeui \
+	            --disable-debug
 	[ $? -ne 0 ] && return 1
 
 	# build the package
@@ -48,7 +44,7 @@ package() {
 	make DESTDIR=$INSTALL_DIR install
 	[ $? -ne 0 ] && return 1
 
-	# install the list of authors
+	# install the list of authors and the credits
 	install -D -m644 AUTHORS $INSTALL_DIR/$LEGAL_DIR/$PKG_NAME/AUTHORS
 	[ $? -ne 0 ] && return 1
 	install -D -m644 THANKS $INSTALL_DIR/$LEGAL_DIR/$PKG_NAME/THANKS

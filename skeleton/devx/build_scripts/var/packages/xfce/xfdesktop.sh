@@ -1,34 +1,37 @@
 #!/bin/sh
 
-PKG_NAME="moon-buggy"
-PKG_VER="1.0.51"
+PKG_NAME="xfdesktop"
+PKG_VER="4.9.1"
 PKG_REV="1"
-PKG_DESC="A simple moon-buggy racing game"
-PKG_CAT="Fun"
-PKG_DEPS=""
+PKG_DESC="Desktop manager for Xfce"
+PKG_CAT="Desktop"
+PKG_DEPS="+xfconf,+libxfce4ui,+garcon,+exo,+libwnck,+thunar"
 
 download() {
-	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0
+	[ -f $PKG_NAME-$PKG_VER.tar.bz2 ] && return 0
 	# download the sources tarball
-	download_file http://m.seehuhn.de/programs/$PKG_NAME-$PKG_VER.tar.gz
+	download_file http://archive.xfce.org/src/xfce/$PKG_NAME/4.9/$PKG_NAME-$PKG_VER.tar.bz2
 	[ $? -ne 0 ] && return 1
 	return 0
 }
 
 build() {
 	# extract the sources tarball
-	tar -xzvf $PKG_NAME-$PKG_VER.tar.gz
+	tar -xjvf $PKG_NAME-$PKG_VER.tar.bz2
 	[ $? -ne 0 ] && return 1
 
 	cd $PKG_NAME-$PKG_VER
 
-	# generate a new configure script
-	autoconf
-	[ $? -ne 0 ] && return 1
-
 	# configure the package
 	./configure $AUTOTOOLS_BASE_OPTS \
-	            --sharedstatedir=/$VAR_DIR/tmp
+	            --disable-static \
+	            --enable-shared \
+	            --enable-desktop-icons \
+	            --enable-file-icons \
+	            --enable-thunarx \
+	            --enable-desktop-menu \
+	            --disable-notifications \
+	            --disable-debug
 	[ $? -ne 0 ] && return 1
 
 	# build the package
@@ -45,8 +48,6 @@ package() {
 
 	# install the list of authors
 	install -D -m644 AUTHORS $INSTALL_DIR/$LEGAL_DIR/$PKG_NAME/AUTHORS
-	[ $? -ne 0 ] && return 1
-	install -D -m644 THANKS $INSTALL_DIR/$LEGAL_DIR/$PKG_NAME/THANKS
 	[ $? -ne 0 ] && return 1
 
 	return 0
