@@ -67,7 +67,7 @@ do
 		nls)
 			# there's a directory called "nls" under the kernel modules prefix
 			case "$file" in
-                *lib/modules/[0-9].[0-9]*/*)
+				*lib/modules/[0-9].[0-9]*/*)
 					;;
 				*)
 					suffix="_NLS"
